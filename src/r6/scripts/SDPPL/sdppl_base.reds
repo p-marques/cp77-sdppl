@@ -51,6 +51,11 @@ public class SDPPL extends ScriptableSystem {
             return;
         }
 
+        if Equals(request.newLevel, 1) {
+            this.Log("New level is 1. Ignoring...");
+            return;
+        }
+
         if Equals(request.statType, gamedataStatType.Level) {
             this.HandlePlayerLevelUp(request.newLevel);
         }
