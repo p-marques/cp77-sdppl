@@ -37,7 +37,7 @@ public class SDPPLMenu extends SDPPLSettings {
     public let PerkPointsOnSkillLevelUp: Int32 = 0;
 
     protected func SetupSettings() -> Void {
-        ModSettings.RegisterListenerToClass(this);
+        SDPPL_RegisterMenu(this);
     }
 
     protected func GetIsEnabled() -> Bool {
@@ -67,4 +67,12 @@ public class SDPPLMenu extends SDPPLSettings {
     protected func GetUseConditionalPointGain() -> Bool {
         return false;
     }
+}
+
+@if(!ModuleExists("ModSettingsModule"))
+public func SDPPL_RegisterMenu(listener: ref<IScriptable>) {}
+
+@if(ModuleExists("ModSettingsModule"))
+public func SDPPL_RegisterMenu(listener: ref<IScriptable>) {
+    ModSettings.RegisterListenerToClass(listener);
 }
