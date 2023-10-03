@@ -2,15 +2,15 @@ module SDPPL.Settings
 
 public class SDPPLSettings {
     private let perkPointsOnSkillLevelUp : Int32;
-	private let useConditionalPointGain : Bool;
-	private let useCustomAttributePointsMap : Bool;
-	private let customAttributePointsMap : array<Int32>;
-	private let customAttributePointsMapDefaultValue : Int32;
-	private let useCustomSkillPointsMap : Bool;
-	private let customSkillPointsMap : array<Int32>;
-	private let customSkillPointsMapDefaultValue : Int32;
-	private let attributePointsOnCharacterLevelUp : Int32;
-	private let perkPointsOnCharacterLevelUp : Int32;
+		private let useConditionalPointGain : Bool;
+		private let useCustomAttributePointsMap : Bool;
+		private let customAttributePointsMap : array<Int32>;
+		private let customAttributePointsMapDefaultValue : Int32;
+		private let useCustomSkillPointsMap : Bool;
+		private let customSkillPointsMap : array<Int32>;
+		private let customSkillPointsMapDefaultValue : Int32;
+		private let attributePointsOnCharacterLevelUp : Int32;
+		private let perkPointsOnCharacterLevelUp : Int32;
 
     public func SetupSettings() -> Void {
         // ------ Settings Start ------
@@ -41,15 +41,15 @@ public class SDPPLSettings {
 
 		// Attribute points gained on character level up. Ignored if using custom map.
 		// Default = 1
-		this.attributePointsOnCharacterLevelUp = 3;
+		this.attributePointsOnCharacterLevelUp = 1;
 
 		// Perk points gained on character level up. Ignored if using custom map.
 		// Default = 1
-		this.perkPointsOnCharacterLevelUp = 3;
+		this.perkPointsOnCharacterLevelUp = 1;
 
 		// ------ Settings End ------
 
-        this.SetupNewPointMaps();
+    	this.SetupNewPointMaps();
     }
 
     private func SetupNewPointMaps() -> Void {
@@ -66,7 +66,7 @@ public class SDPPLSettings {
 	private func SetupAtttributePointMap() -> Void {
 		let i : Int32 = 0;
 
-		while i < 50 {
+		while i < 60 {
 			ArrayPush(this.customAttributePointsMap, this.customAttributePointsMapDefaultValue);
 
 			i += 1;
@@ -83,7 +83,7 @@ public class SDPPLSettings {
 	private func SetupSkillPointMap() -> Void {
 		let i : Int32 = 0;
 
-		while i < 50 {
+		while i < 60 {
 			ArrayPush(this.customSkillPointsMap, this.customSkillPointsMapDefaultValue);
 
 			i += 1;

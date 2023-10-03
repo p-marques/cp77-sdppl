@@ -1,32 +1,20 @@
 module SDPPL.Base
 import SDPPL.Settings.SDPPLSettings
-import SDPPL.Menu.SDPPLMenu
 
 public class SDPPL extends ScriptableSystem {
     private let player: ref<PlayerPuppet>;
     private let statsSystem: ref<StatsSystem>;
     private let levelUpListener: ref<LevelChangedListener>;
     private let playerDevelopmentData: ref<PlayerDevelopmentData>;
-    private let settingsMode: SettingsMode;
     private let settings: ref<SDPPLSettings>;
 
     private func OnPlayerAttach(request: ref<PlayerAttachRequest>) -> Void {
-        this.Log("::OnPlayerAttach");
-
         this.player = GameInstance.GetPlayerSystem(request.owner.GetGame()).GetLocalPlayerMainGameObject() as PlayerPuppet;
         this.playerDevelopmentData = PlayerDevelopmentSystem.GetData(this.player);
 
         this.RegisterListeners();
-        this.settingsMode = SDPPL_GetSettingsMode();
 
-        if Equals(this.settingsMode, SettingsMode.Default) {
-            this.settings = new SDPPLSettings();
-            this.Log("settingsMode = Default");
-        }
-        else {
-            this.settings = new SDPPLMenu();
-            this.Log("settingsMode = Menu");
-        }
+        this.settings = new SDPPLSettings();
 
         this.settings.SetupSettings();
     }
@@ -43,16 +31,11 @@ public class SDPPL extends ScriptableSystem {
     }
 
     private func OnLevelUpRequest(request: ref<HandleLevelUpRequest>) -> Void {
-        this.Log("::OnLevelUpRequest");
-        this.Log("[" + EnumValueToString("gamedataStatType", Cast<Int64>(EnumInt(request.statType))) + "] leveled up to " + request.newLevel + ".");
-
         if !this.settings.GetIsEnabled() {
-            this.Log("::GetIsEnabled() == false");
             return;
         }
 
         if Equals(request.newLevel, 1) {
-            this.Log("New level is 1. Ignoring...");
             return;
         }
 
@@ -84,9 +67,6 @@ public class SDPPL extends ScriptableSystem {
         if perkPointsDelta != 0 {
             this.playerDevelopmentData.AddDevelopmentPoints(perkPointsDelta, gamedataDevelopmentPointType.Primary);
         }
-
-        this.Log("::HandlePlayerLevelUp -> attributePointsDelta was " + attributePointsDelta);
-        this.Log("::HandlePlayerLevelUp -> perkPointsDelta was " + perkPointsDelta);
     }
 
     private func HandleSkillLevelUp() -> Void {
@@ -95,28 +75,15 @@ public class SDPPL extends ScriptableSystem {
         if perkPointsToAdd > 0 {
             this.playerDevelopmentData.AddDevelopmentPoints(perkPointsToAdd, gamedataDevelopmentPointType.Primary);
         }
-
-        this.Log("::HandleSkillLevelUp -> perkPointsToAdd was " + perkPointsToAdd);
-    }
-
-    private func Log(msg: String) -> Void {
-        LogChannel(n"SDPPL", msg);
     }
 
     public static func IsStatASkill(statType: gamedataStatType) -> Bool {
         switch statType {
-            case statType.Assault:
-            case statType.Athletics:
-            case statType.Brawling:
-            case statType.ColdBlood:
-            case statType.CombatHacking:
-            case statType.Crafting:
-            case statType.Demolition:
-            case statType.Engineering:
-            case statType.Gunslinger:
-            case statType.Hacking:
-            case statType.Kenjutsu:
-            case statType.Stealth:
+            case statType.CoolSkill:
+            case statType.IntelligenceSkill:
+            case statType.ReflexesSkill:
+            case statType.StrengthSkill:
+            case statType.TechnicalAbilitySkill:
                 return true;
         }
 
@@ -145,19 +112,4 @@ public class LevelChangedListener extends ScriptStatsListener {
             }
         }
     }
-}
-
-@if(!ModuleExists("ModSettingsModule"))
-public func SDPPL_GetSettingsMode() -> SettingsMode {
-    return SettingsMode.Default;
-}
-
-@if(ModuleExists("ModSettingsModule"))
-public func SDPPL_GetSettingsMode() -> SettingsMode {
-    return SettingsMode.Menu;
-}
-
-enum SettingsMode {
-    Default = 0,
-    Menu = 1
 }
