@@ -1,11 +1,13 @@
 module SDPPL.Base
 import SDPPL.Settings.SDPPLSettings
+import SDPPL.Menu.SDPPLMenu
 
 public class SDPPL extends ScriptableSystem {
     private let player: ref<PlayerPuppet>;
     private let statsSystem: ref<StatsSystem>;
     private let levelUpListener: ref<LevelChangedListener>;
     private let playerDevelopmentData: ref<PlayerDevelopmentData>;
+    private let settingsMode: SettingsMode;
     private let settings: ref<SDPPLSettings>;
 
     private func OnPlayerAttach(request: ref<PlayerAttachRequest>) -> Void {
@@ -13,8 +15,14 @@ public class SDPPL extends ScriptableSystem {
         this.playerDevelopmentData = PlayerDevelopmentSystem.GetData(this.player);
 
         this.RegisterListeners();
+        this.settingsMode = SDPPL_GetSettingsMode();
 
-        this.settings = new SDPPLSettings();
+        if Equals(this.settingsMode, SettingsMode.Default) {
+            this.settings = new SDPPLSettings();
+        }
+        else {
+            this.settings = new SDPPLMenu();
+        }
 
         this.settings.SetupSettings();
     }
@@ -112,4 +120,19 @@ public class LevelChangedListener extends ScriptStatsListener {
             }
         }
     }
+}
+
+@if(!ModuleExists("ModSettingsModule"))
+public func SDPPL_GetSettingsMode() -> SettingsMode {
+    return SettingsMode.Default;
+}
+
+@if(ModuleExists("ModSettingsModule"))
+public func SDPPL_GetSettingsMode() -> SettingsMode {
+    return SettingsMode.Menu;
+}
+
+enum SettingsMode {
+    Default = 0,
+    Menu = 1
 }

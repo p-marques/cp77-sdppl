@@ -54,7 +54,7 @@ public class SDPPLSettings {
 
     private func SetupNewPointMaps() -> Void {
 		if this.useCustomAttributePointsMap {
-			this.SetupAtttributePointMap();
+			this.SetupAttributePointMap();
 		}
 
 		if this.useCustomSkillPointsMap {
@@ -63,7 +63,7 @@ public class SDPPLSettings {
 	}
 
     // Attribute point map setup.
-	private func SetupAtttributePointMap() -> Void {
+	private func SetupAttributePointMap() -> Void {
 		let i : Int32 = 0;
 
 		while i < 60 {
